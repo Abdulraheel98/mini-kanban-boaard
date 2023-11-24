@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import Ticket from "./ticket";
+import client from "../graphql/apolloClient";
+import Ticket from "./Ticket";
 import { FiFilter } from "react-icons/fi";
 import { useDrop } from "react-dnd";
-import client from "../graphql/Apollo_client";
 import { GET_TICKETS_BY_STATUS } from "../graphql/query";
 import { useAppContext } from "./apicontext";
-
-import { kanbanColumnProps } from "./prop_validation/ticketPropValidation";
+import { kanbanColumnProps } from "./validations/TicketValidation";
 
 const KanbanColumn = ({ title, droppableId, onDragEnd }) => {
   const { toggleState } = useAppContext();
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [sortByDate, setSortByDate] = useState(false);
 
   const [, drop] = useDrop({
@@ -23,7 +21,6 @@ const KanbanColumn = ({ title, droppableId, onDragEnd }) => {
   });
 
   useEffect(() => {
-    console.log("render", toggleState);
     const fetchData = async () => {
       try {
         const result = await client.query({
@@ -47,7 +44,6 @@ const KanbanColumn = ({ title, droppableId, onDragEnd }) => {
         setTickets(sortedTickets);
         setLoading(false);
       } catch (error) {
-        setError(error);
         setLoading(false);
       }
     };
@@ -61,15 +57,6 @@ const KanbanColumn = ({ title, droppableId, onDragEnd }) => {
     return (
       <div className="bg-red-200 p-4 w-full rounded-lg shadow-lg m-4">
         <p className="text-white font-bold">Loading:</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="bg-red-500 p-4 w-full rounded-lg shadow-lg m-4">
-        <p className="text-white font-bold">Error in tickets getting:</p>
-        <p className="text-white">{error.message}</p>
       </div>
     );
   }
@@ -89,7 +76,7 @@ const KanbanColumn = ({ title, droppableId, onDragEnd }) => {
         className=" flex justify-between bg-gray-600 p-1 w-full rounded-lg mx-auto"
         style={{ height: ` 40px` }}
       >
-        <h2 className="text-xl font-bold mb-4 text-white">{title}</h2>
+        <h2 className="text-xl font-bold mb-4 text-white">{title.charAt(0).toUpperCase() +  title.slice(1)}</h2>
         <button
           className="flex items-center text-white"
           onClick={() => setSortByDate(!sortByDate)}

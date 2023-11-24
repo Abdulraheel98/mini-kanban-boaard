@@ -1,24 +1,28 @@
-import { useFormik } from "formik";
-import validationSchema from "./validationSchema";
 import Modal from "react-modal";
-import { format, parseISO } from "date-fns";
-import { CreateTicketFormProp } from "./prop_validation/createTicketFormPropValidation";
+import validationSchema from "./validationSchema";
+import { useFormik } from "formik";
+import { useQuery } from "@apollo/client";
+import { format} from "date-fns";
+import { CreateTicketFormProp } from "./validations/FormProp";
+import { GET_All_TICKETS } from "../graphql/query";
 
 Modal.setAppElement("#root");
 
 const CreateTicketForm = ({ isOpen, onClose, onSubmit }) => {
+  const { refetch } = useQuery(GET_All_TICKETS);
+
   const formik = useFormik({
     initialValues: {
-      title: "",
-      description: "",
-      assignedTo: "",
-      date: format(new Date(), "yyyy-MM-dd"),
+      title: '',
+      description: '',
+      assignedTo: '',
+      date: format(new Date(), 'yyyy-MM-dd'),
     },
-
-    validationSchema: validationSchema,
+    validationSchema: validationSchema, 
     onSubmit: async (values) => {
-      onSubmit(values);
+      await onSubmit(values);
       onClose();
+      refetch(); 
     },
   });
   const handleAfterClose = () => {
@@ -38,12 +42,6 @@ const CreateTicketForm = ({ isOpen, onClose, onSubmit }) => {
       label: "Assigned To",
       type: "text",
       placeholder: "Enter assigned to",
-    },
-    {
-      name: "date",
-      label: "date",
-      type: "date",
-      placeholder: "Select due date",
     },
   ];
   return (
@@ -69,7 +67,6 @@ const CreateTicketForm = ({ isOpen, onClose, onSubmit }) => {
                 <label htmlFor={field.name} className="font-bold">
                   {field.label}
                 </label>
-                {field.type === "textarea" ? (
                   <textarea
                     id={field.name}
                     name={field.name}
@@ -79,26 +76,7 @@ const CreateTicketForm = ({ isOpen, onClose, onSubmit }) => {
                     className="w-full border rounded-md p-2"
                     style={{ opacity: 1 }}
                   />
-                ) : (
-                  <input
-                    type={field.type}
-                    id={field.name}
-                    name={field.name}
-                    onChange={formik.handleChange}
-                    value={
-                      field.type === "date"
-                        ? format(
-                            parseISO(formik.values[field.name]),
-                            "yyyy-MM-dd"
-                          )
-                        : formik.values[field.name]
-                    }
-                    placeholder={field.placeholder}
-                    disabled={field.type === "date"}
-                    className="w-full border rounded-md p-2"
-                    style={{ opacity: 1 }}
-                  />
-                )}
+               
                 {formik.errors[field.name] && (
                   <div className="text-red-500">
                     {formik.errors[field.name]}

@@ -1,15 +1,14 @@
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import KanbanColumn from "./kanbanColumn";
 import { useUpdateKanbanTicketMutation } from "./kanbanUtils";
-import { Status } from "../constants/index";
+import { Status } from "../constants";
+import KanbanColumn from "./KanbanColumn";
 
 function DndComponent() {
   const { updateKanbanTicket } = useUpdateKanbanTicketMutation();
 
   const onDragEnd = (result, droppableId, title) => {
     if (!result && title) return;
-
     updateKanbanTicket(result.id, title);
   };
 
@@ -29,7 +28,6 @@ function DndComponent() {
                 title={status}
                 droppableId={id}
                 onDragEnd={onDragEnd}
-                // toggleState={index === 0 ? toggleState : true}
               />
             );
           })}

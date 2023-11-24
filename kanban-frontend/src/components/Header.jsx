@@ -1,8 +1,8 @@
 import { useState } from "react";
-import CreateTicketForm from "./createTicketForm";
-import { CREATE_KANBAN_TICKET } from "../graphql/mutation";
 import { useMutation } from "@apollo/client";
 import { useAppContext } from "./apicontext";
+import CreateTicketForm from "./CreateTicketForm";
+import { CREATE_KANBAN_TICKET } from "../graphql/mutation";
 
 function Header() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -21,6 +21,7 @@ function Header() {
     createKanbanTicket({
       variables,
     });
+    
     toggle();
   };
   return (

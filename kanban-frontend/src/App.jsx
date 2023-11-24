@@ -1,8 +1,8 @@
-import DndComponent from "./components/dndComponent";
+import client from "./graphql/apolloClient";
+import Header from "./components/Header";
+import DndComponent from "./components/DndComponent";
 import { AppProvider } from "./components/apicontext";
 import { ApolloProvider } from "@apollo/client";
-import client from "./graphql/Apollo_client";
-import Header from "./components/header";
 
 import "./App.css";
 

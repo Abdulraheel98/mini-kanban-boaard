@@ -11,7 +11,6 @@ export const ticketShape = {
 
 export const kanbanColumnProps = {
   title: PropTypes.string.isRequired,
-  // toggleState: PropTypes.bool.isRequired,
   droppableId: PropTypes.number.isRequired,
   onDragEnd: PropTypes.func.isRequired,
 };

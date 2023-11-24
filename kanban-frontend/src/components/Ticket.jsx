@@ -1,10 +1,11 @@
+import PropTypes from "prop-types";
+import { ticketShape } from "./validations/TicketValidation";
 import { format } from "date-fns";
 import { useDrag } from "react-dnd";
-import PropTypes from "prop-types";
-import { ticketShape } from "./prop_validation/ticketPropValidation";
 
 const Ticket = ({ ticket, index }) => {
   const isDone = ticket.status === "done";
+  const{title,description,date,id,assignedTo}=ticket
 
   const [{ isDragging }, drag] = useDrag({
     type: "CARD",
@@ -26,14 +27,14 @@ const Ticket = ({ ticket, index }) => {
               isDone ? "line-through" : ""
             }`}
           >
-            {ticket.date}
+            {date}
           </p>
           <p
             className={`text-lg font-bold text-center ${
               isDone ? "line-through" : ""
             }`}
           >
-            {ticket.title}
+            {title}
           </p>
         </div>
         <hr className="my-2 border-t border-gray-300 " />
@@ -46,14 +47,14 @@ const Ticket = ({ ticket, index }) => {
             Description
           </p>
           <p
-            className={`border border-gray-300  rounded p-2 text-xs break-all relative block mb-1  ${
+            className={`border border-gray-300 rounded p-2 text-xs break-all relative block mb-1  ${
               isDone ? "line-through" : ""
             }`}
             style={{ minHeight: "70px" }}
           >
-            {ticket.description.length > 100
-              ? ticket.description.substring(0, 100) + ".."
-              : ticket.description}
+            {description.length > 100
+              ? description.substring(0, 100) + ".."
+              : description}
           </p>
         </div>
 
@@ -63,14 +64,14 @@ const Ticket = ({ ticket, index }) => {
               isDone ? "line-through" : ""
             }`}
           >
-            {`#${ticket.id.substring(0, 8)}`}
+            {`#${id.substring(0, 8)}`}
           </p>
           <p
             className={`text-xs text-gray-600 border-b border-gray-300 pb-1 ${
               isDone ? "line-through" : ""
             }`}
           >
-            {ticket.assignedTo}
+            {assignedTo}
           </p>
         </div>
       </div>
